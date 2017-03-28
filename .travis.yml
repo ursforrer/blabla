@@ -35,4 +35,3 @@ deploy:
   repo: ursforrer/blabla
 after_success:
 - sh set_tags.sh
-	
