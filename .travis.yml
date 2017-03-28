@@ -1,21 +1,38 @@
 language: android
 jdk: oraclejdk8
 sudo: false
-
 android:
   components:
-    - platform-tools
-    - tools
-    - build-tools-24.0.2
-    - android-23
-    - sys-img-armeabi-v7a-google_apis-23
-    - extra-android-m2repository
-
-before_script:
-  # Create and start emulator
-  - echo no | android create avd --force -n test -t "android-23" --abi "armeabi-v7a" --tag "google_apis"
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-
-script: ./gradlew connectedAndroidTest
+  - platform-tools
+  - tools
+  - build-tools-24.0.2
+  - android-23
+  - sys-img-armeabi-v7a-google_apis-23
+  - extra-android-m2repository
+before_install:
+- chmod +x gradlew
+script:
+- "./gradlew clean build connectedAndroidTest -PdisablePreDex --stacktrace"
+notifications:
+  email: true
+before_cache:
+- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+  - "$HOME/.m2"
+  - "$HOME/.gradle"
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+deploy:
+  provider: releases
+  api_key:
+    secure: UXNqm2thXS0UzPGvB93HezHCIoxIjqP9jKP0InXhcErBzqtHZQ95DRi8cICOqo7NXfBZeVN/zukNDyQeSzjbkrtTDm5JwdLEbcBI6VG7qux0mZzfj+Dy2ly8fGZ1oOGWOvyWy+vZktHI7U6w0jW5lqzSWpgr5UgMhKsYdhY0+y1IOcOOKm7rsebHpFM6PGPPNI5xcdXspiz0RIhbq+S+WmfJ6KEmOjtO/SUPtwjaY0Pu/8O+R1oB2rNV8WY6qIQWL7/s+lN/s0w1PdgiSwIeMWoi28Pn0cCw+KsvZ1GXatcOUk/zpcmZMsQSbtQGzHwF6aHMi9+kG/H+5s69oIpPg+KUWY3pjv/U9+X8veksftT9UIdqes9N7TRnXI3/8+NenD2KBGzcgoeojo7vOcBNh61Cl3gVd9VKXRWKPj21ju85R1I8aaEjbUWMVzRKmGOCzxyG0R9V4+geM7qlWVIkj89LafAvExchYBi8T/nSrg4+lLGwwfp5uB7IjCzM7rSBd/JimPN70w7tBDV+eJbGPGJ/tylORAfSGXyQfHybDBNL2B50keq0VlhXkAdtyUhxmM2QXc5ilTmHTPbmM8SDMJiCMvoRuq7ltFpx5MSGwZg0qs5XNYaq2p8uiL5A5zMQEdQxIhcY897KdXkz8Xn+ydJZf7LNJjlUS8vY3RM8YOc=
+  file: hsrmarket/build/outputs/apk/hsrmarket*release*.apk
+  file_glob: "true"
+  skip_cleanup: true
+  on:
+  branch: master
+    repo: ursforrer/blabla
+after_success:
+- sh set_tags.sh
+	
