@@ -32,7 +32,7 @@ deploy:
   skip_cleanup: true
   on:
   branch: master
-    repo: ursforrer/blabla
+  repo: ursforrer/blabla
 after_success:
 - sh set_tags.sh
 	
