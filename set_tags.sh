@@ -19,6 +19,8 @@ if [ "$TRAVIS_BRANCH" = "$BRANCH" ]; then
       git fetch origin
 
       echo -e "Done magic with tags.\n"
+	  
+	  cp app/build/outputs/apk/app-debug.apk app/build/outputs/apk/HSRmarket_V0_${TRAVIS_BUILD_NUMBER}.apk
   fi
   fi
 fi
